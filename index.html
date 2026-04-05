@@ -775,8 +775,60 @@ footer{background:var(--dark2);border-top:1px solid rgba(245,197,24,0.1);padding
   </div>
   <div class="foot-bot">
     <span>© 2026 श्री आर्यन & धनराज स्वीट्स. All rights reserved.</span>
+    <a href="Admin.html" class="admin-ghost-btn" title="Admin">⚙</a>
   </div>
 </footer>
+<style>
+.admin-ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.12);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+  vertical-align: middle;
+  user-select: none;
+}
+.admin-ghost-btn:hover {
+  color: var(--gold);
+  border-color: rgba(245,197,24,0.35);
+  background: rgba(245,197,24,0.06);
+}
+
+.scroll-top-btn {
+  position: fixed;
+  right: 18px;
+  bottom: 90px;
+  width: 42px;
+  height: 42px;
+  background: rgba(245,197,24,0.12);
+  border: 1px solid rgba(245,197,24,0.3);
+  color: var(--gold);
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 8888;
+  transition: background 0.2s, transform 0.2s;
+}
+.scroll-top-btn:hover {
+  background: rgba(245,197,24,0.22);
+  transform: translateY(-2px);
+}
+
+</style>
+
+
 
 <!-- CART FAB -->
 <div class="float-cart"><button class="cart-fab" onclick="toggleCart()">🛒<span class="cart-badge" id="cartBadge">0</span></button></div>
@@ -1841,7 +1893,11 @@ window.addDoc     = addDoc;
 window.collection = collection;
 
 console.log('🔥 Firebase READY');
+window.addEventListener('scroll', function() {
+  var btn = document.getElementById('scrollTopBtn');
+  btn.style.display = window.scrollY > 300 ? 'flex' : 'none';
+});
 </script>
-
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">▲</button>
 </body>
 </html>
