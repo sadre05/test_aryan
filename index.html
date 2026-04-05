@@ -986,6 +986,7 @@ function btnCOD() {
   window.open('https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(lines.join('\n')),'_blank');
 
   cart=[];appliedCoupon=null;locChecked=false;
+  var orderData=validateAndBuildOrder();if(orderData){window.addDoc(window.collection(window.db,'aryan_orders'),orderData).then(function(){console.log('✅ Firebase save hua!');}).catch(function(e){console.error('❌',e);});}
   refreshCart();toggleCart();
   document.getElementById('oName').value='';
   document.getElementById('oPhone').value='';
