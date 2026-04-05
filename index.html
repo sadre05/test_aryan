@@ -983,10 +983,28 @@ function btnCOD() {
   lines.push(e10+' *Payment: '+e8+' Cash on Delivery*');
   lines.push(e11+' Please confirm & prepare!');
 
+  // ── Firebase mein save karo — cart clear hone SE PEHLE ──
+  var firebaseOrder = {
+    orderId:    o.orderId,
+    name:       o.name,
+    phone:      o.phone,
+    address:    o.addr || 'Not provided',
+    items:      cart.map(function(c){ return {name:c.name, price:c.price, qty:c.qty}; }),
+    subtotal:   o.subtotal,
+    delivery:   o.delivery.charge,
+    grandTotal: o.grandTotal,
+    coupon:     o.couponCode || null,
+    discount:   o.couponDisc || 0,
+    status:     'pending',
+    time:       new Date().toString()
+  };
+  window.addDoc(window.collection(window.db, 'aryan_orders'), firebaseOrder)
+    .then(function(){ console.log('✅ Firebase save hua!'); })
+    .catch(function(e){ console.error('❌ Firebase error:', e); });
+
   window.open('https://wa.me/'+WHATSAPP_NUMBER+'?text='+encodeURIComponent(lines.join('\n')),'_blank');
 
   cart=[];appliedCoupon=null;locChecked=false;
-  var orderData=validateAndBuildOrder();if(orderData){window.addDoc(window.collection(window.db,'aryan_orders'),orderData).then(function(){console.log('✅ Firebase save hua!');}).catch(function(e){console.error('❌',e);});}
   refreshCart();toggleCart();
   document.getElementById('oName').value='';
   document.getElementById('oPhone').value='';
