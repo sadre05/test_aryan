@@ -1716,8 +1716,8 @@ function placeOrder() {
   showModal('🎉', 'Order Placed!', 'Thank you, ' + name + '! We will call you on ' + phone + ' to confirm shortly. 🙏');
 
   // ── Firebase save ──
-  addDoc(collection(window.db, 'aryan_orders'), orderData)
-    .then(function(){ console.log('✅ Firebase mein save ho gaya'); })
+  window.addDoc(window.collection(window.db, 'aryan_orders'), orderData)
+    .then(function(){ console.log('✅ Firebase mein save ho gaya!'); })
     .catch(function(err){ console.error('❌ Firebase error:', err); });
 }
 
