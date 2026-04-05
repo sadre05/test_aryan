@@ -1711,31 +1711,14 @@ function placeOrder() {
   document.getElementById('oPhone').value = '';
   document.getElementById('oAddr').value  = '';
 
-  // ── Firebase dynamic import — module timing issue fix ──
-  import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js').then(function(fbApp) {
-    return import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js').then(function(fbStore) {
-      var firebaseConfig = {
-        apiKey: "AIzaSyCre4ncynjbw3dvPeLhe6lnsoH4xgtu_wc",
-        authDomain: "aryansweets.firebaseapp.com",
-        projectId: "aryansweets",
-        storageBucket: "aryansweets.firebasestorage.app",
-        messagingSenderId: "741941023564",
-        appId: "1:741941023564:web:e1a914ebe11fcae69475e9"
-      };
-      var app;
-      try { app = fbApp.initializeApp(firebaseConfig, 'aryansweets'); }
-      catch(e) { app = fbApp.getApp('aryansweets'); }
-      var db = fbStore.getFirestore(app);
-      return fbStore.addDoc(fbStore.collection(db, 'aryan_orders'), orderData);
-    });
-  }).then(function() {
-    console.log('✅ Firebase mein order save hua!');
-  }).catch(function(err) {
-    console.error('❌ Firebase error:', err);
-  }).finally(function() {
-    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(lines.join('\n')), '_blank');
-    showModal('🎉', 'Order Placed!', 'Thank you, ' + name + '! We will call you on ' + phone + ' to confirm shortly. 🙏');
-  });
+  // ── WhatsApp + Modal — hamesha chalega ──
+  window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(lines.join('\n')), '_blank');
+  showModal('🎉', 'Order Placed!', 'Thank you, ' + name + '! We will call you on ' + phone + ' to confirm shortly. 🙏');
+
+  // ── Firebase save ──
+  addDoc(collection(window.db, 'aryan_orders'), orderData)
+    .then(function(){ console.log('✅ Firebase mein save ho gaya'); })
+    .catch(function(err){ console.error('❌ Firebase error:', err); });
 }
 
 /* ═══════════════════════════════════════════
@@ -1813,6 +1796,32 @@ document.getElementById('bkDate').min = new Date().toISOString().split('T')[0];
 renderMenu('all');
 buildTables();
 refreshCart();
+</script>
+
+<!-- ✅ Firebase Module Script — page load hote hi initialize hoga -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCre4ncynjbw3dvPeLhe6lnsoH4xgtu_wc",
+  authDomain: "aryansweets.firebaseapp.com",
+  projectId: "aryansweets",
+  storageBucket: "aryansweets.firebasestorage.app",
+  messagingSenderId: "741941023564",
+  appId: "1:741941023564:web:e1a914ebe11fcae69475e9",
+  measurementId: "G-R66JEM5Y9P"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// Global bana do taaki placeOrder() use kar sake
+window.db         = db;
+window.addDoc     = addDoc;
+window.collection = collection;
+
+console.log('🔥 Firebase READY');
 </script>
 
 </body>
