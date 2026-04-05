@@ -918,10 +918,10 @@ footer{background:var(--dark2);border-top:1px solid rgba(245,197,24,0.1);padding
 function validateAndBuildOrder() {
   if (!cart.length) { toast('🛒 Please add items first!'); return null; }
   if (!locChecked) {
-    toast('📍 Please verify your delivery location first!');
-    var w=document.getElementById('locCheckWrap');
-    if(w) w.scrollIntoView({behavior:'smooth',block:'center'});
-    return null;
+    toast('📍 Please verify your delivery location or PIN code first!');
+    var wrap = document.getElementById('locCheckWrap');
+    if (wrap) wrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
   }
   var name=document.getElementById('oName').value.trim();
   var phone=document.getElementById('oPhone').value.trim();
