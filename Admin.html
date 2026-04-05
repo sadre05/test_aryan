@@ -248,6 +248,11 @@ body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--cream);m
         <div class="stat-val" id="statPending" style="color:var(--orange)">—</div>
         <div class="stat-sub">Awaiting action</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-label">📊 Total Business</div>
+        <div class="stat-val" id="statTotalBusiness" style="color:#a78bfa">—</div>
+        <div class="stat-sub">All orders grand total</div>
+      </div>
     </div>
 
     <!-- Filter Bar -->
@@ -372,26 +377,32 @@ function calcStats() {
   var month = now.getMonth();
   var year  = now.getFullYear();
 
-  var todayCount=0, todayRev=0, monthCount=0, monthRev=0, confirmed=0, pending=0;
+  var todayCount=0, todayRev=0, monthCount=0, monthRev=0, confirmed=0, pending=0, totalBusiness=0, todayConfRev=0, monthConfRev=0;
 
   allOrders.forEach(function(o) {
     var t = o.time ? new Date(o.time) : null;
     var amt = Number(o.grandTotal || o.subtotal || 0);
+    totalBusiness += amt;
     if (t && t.toDateString() === today) { todayCount++; todayRev += amt; }
     if (t && t.getMonth() === month && t.getFullYear() === year) { monthCount++; monthRev += amt; }
-    if (o.status === 'confirmed') confirmed++;
-    if (o.status === 'pending')   pending++;
+    if (o.status === 'confirmed') {
+      confirmed++;
+      if (t && t.toDateString() === today) todayConfRev += amt;
+      if (t && t.getMonth() === month && t.getFullYear() === year) monthConfRev += amt;
+    }
+    if (o.status === 'pending') pending++;
   });
 
   var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   document.getElementById('statTodayCount').textContent  = todayCount;
-  document.getElementById('statTodayRev').textContent    = '₹' + todayRev;
+  document.getElementById('statTodayRev').textContent    = '₹' + todayConfRev;
   document.getElementById('statMonthCount').textContent  = monthCount;
-  document.getElementById('statMonthRev').textContent    = '₹' + monthRev;
+  document.getElementById('statMonthRev').textContent    = '₹' + monthConfRev;
   document.getElementById('statConfirmed').textContent   = confirmed;
   document.getElementById('statPending').textContent     = pending;
   document.getElementById('statMonthLabel').textContent  = monthNames[month] + ' ' + year;
   document.getElementById('liveCount').textContent       = '🟢 ' + allOrders.length + ' Orders';
+  document.getElementById('statTotalBusiness').textContent = '₹' + totalBusiness;
 }
 
 // ── FILTER ──
